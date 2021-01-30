@@ -25,3 +25,10 @@ body {
     padding: 10px;
     align-items: center;
 }
+#flexbox-result {
+    display: flex;
+    padding: 10px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
