@@ -7,6 +7,8 @@ body {
 .container-1 {
     text-align: center;
     padding: 10px;
+    margin: 0 auto;
+    width: 75%;
 }
 
 /* Flexbox Container 1 */
