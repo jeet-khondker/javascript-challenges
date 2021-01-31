@@ -3,14 +3,14 @@ body {
     background: linear-gradient(to right top, #65dfc9, #6cdbeb);
 }
 
-.container-1, .container-2, .container-3 {
+.container-1, .container-2, .container-3, .container-4 {
     text-align: center;
     padding: 10px;
     margin: 0 auto;
     width: 75%;
 }
 
-.flexbox-container-1, .flexbox-container-2, .flexbox-rps {
+.flexbox-container-1, .flexbox-container-2, .flexbox-rps, .flexbox-pick-color {
     display: flex;
     border: 1px solid #f3f1f1;
     padding: 10px;
