@@ -126,3 +126,70 @@ function startGame(humanImageChoice, computerImageChoice, finalMessage) {
     document.getElementById("flexbox-rps-div").appendChild(computerDiv)
 
 }
+
+// Challenge 4 : Change the Color of All Buttons
+
+const RED = "btn-danger"
+const GREEN = "btn-success"
+const BLUE = "btn-primary"
+const YELLOW = "btn-warning"
+const BLACK = "btn-dark"
+
+var all_buttons = document.getElementsByTagName("button")
+
+var copyAllButtons = []
+
+//  Duplicating all buttons for future reference (Important While reseting color)
+for (let button = 0; button < all_buttons.length; button++) {
+    copyAllButtons.push(all_buttons[button].classList[1]) // Getting the 2nd class of each button
+}
+
+// Function : Changing Button Color
+function buttonColorChange(aButton) {
+
+    if (aButton.value === "red") {
+        colorButtonRed()
+    } else if (aButton.value === "green") {
+        colorButtonGreen()
+    } else if (aButton.value === "reset") {
+        resetButtonColor()
+    } else if (aButton.value === "random") {
+        colorButtonRandom()
+    }
+
+}
+
+// Function : Color All Buttons to Red
+function colorButtonRed() {
+    for (let button = 0; button < all_buttons.length; button++) {
+        all_buttons[button].classList.remove(all_buttons[button].classList[1])
+        all_buttons[button].classList.add(RED)
+    }
+}
+
+// Function : Color All Buttons to Green
+function colorButtonGreen() {
+    for (let button = 0; button < all_buttons.length; button++) {
+        all_buttons[button].classList.remove(all_buttons[button].classList[1])
+        all_buttons[button].classList.add(GREEN)
+    }
+}
+
+// Function: Resetting All Buttons Colors to Originals
+function resetButtonColor() {
+    for (let button = 0; button < all_buttons.length; button++) {
+        all_buttons[button].classList.remove(all_buttons[button].classList[1])
+        all_buttons[button].classList.add(copyAllButtons[button])
+    }
+}
+
+// Function : Painting Random Colors to All Buttons
+function colorButtonRandom() {
+    let choices = [RED, BLUE, GREEN, YELLOW, BLACK]
+
+    for (let button = 0; button < all_buttons.length; button++) {
+        var randomNumber = Math.floor(Math.random() * 5)
+        all_buttons[button].classList.remove(all_buttons[button].classList[1])
+        all_buttons[button].classList.add(choices[randomNumber])
+    }
+}
