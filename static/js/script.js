@@ -12,3 +12,7 @@ function getAgeInDays() {
 
     document.getElementById("flexbox-result").appendChild(h1)
 }
+
+function reset() {
+    document.getElementById("ageInDays").remove()
+}
