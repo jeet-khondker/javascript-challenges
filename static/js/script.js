@@ -307,6 +307,7 @@ function blackjackDeal() {
         document.querySelector("#blackjack-result").style.color = "#000000"
 
         blackjackGame["turnsOver"] = true
+        document.getElementById("standBtn").disabled = false
     }
 
 }
@@ -364,6 +365,8 @@ async function blackjackStand() {
     blackjackGame["turnsOver"] = true
     let winner = findWinner()
     showResult(winner)
+
+    document.getElementById("standBtn").disabled = true
     
 }
 
