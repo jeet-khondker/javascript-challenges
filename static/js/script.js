@@ -193,3 +193,238 @@ function colorButtonRandom() {
         all_buttons[button].classList.add(choices[randomNumber])
     }
 }
+
+// Challenge 5 : BlackJack Game of 21
+
+let blackjackGame = {
+    "you" : {
+        "scoreSpan" : "#your-blackjack-result",
+        "div" : "#your-box",
+        "score" : 0,
+    },
+    "dealer" : {
+        "scoreSpan" : "#dealer-blackjack-result",
+        "div" : "#dealer-box",
+        "score" : 0,
+    },
+    "cards" : [
+        '2', '3', '4', '5', '6', '7', '8', '9', "10", 'K', 'J', 'Q', 'A'
+    ],
+    "cardsPoint" : {
+        '2' : 2,
+        '3' : 3,
+        '4' : 4,
+        '5' : 5,
+        '6' : 6,
+        '7' : 7,
+        '8' : 8,
+        '9' : 9,
+        "10" : 10,
+        'K' : 10,
+        'J' : 10,
+        'Q' : 10,
+        'A' : [1, 11],
+    },
+    "wins" : 0,
+    "losses" : 0,
+    "draws" : 0,
+    "isStand" : false,
+    "turnsOver" : false,
+}
+
+const YOU = blackjackGame["you"]
+const DEALER = blackjackGame["dealer"]
+
+const hitSound = new Audio("static/sounds/swish.m4a")
+const winSound = new Audio("static/sounds/cash.mp3")
+const lostSound = new Audio("static/sounds/aww.mp3")
+
+document.querySelector("#hitBtn").addEventListener("click", blackjackHit)
+document.querySelector("#standBtn").addEventListener("click", blackjackStand)
+document.querySelector("#dealBtn").addEventListener("click", blackjackDeal)
+
+// Function : Hit Button
+function blackjackHit() {
+    if (blackjackGame["isStand"] === false) {
+        let card = generateRandomCard()
+        showCard(card, YOU)
+        updateScore(card, YOU)
+        showScore(YOU)
+    }
+    
+}
+
+// Function : Generate Random Card
+function generateRandomCard() {
+    let randomIndex = Math.floor(Math.random() * 13)
+    return blackjackGame["cards"][randomIndex]
+}
+
+// Function : Show Card
+function showCard(card, activePlayer) {
+
+    if (activePlayer["score"] <= 21) {
+        let cardImage = document.createElement("img")
+        cardImage.src = `static/images/blackjack/${card}.png`
+        document.querySelector(activePlayer["div"]).appendChild(cardImage)
+        hitSound.play()
+    }
+    
+}
+
+// Function : Reset Game - Deal Button Functionality
+function blackjackDeal() {
+
+    if (blackjackGame["turnsOver"] === true) {
+
+        blackjackGame["isStand"] = false
+
+        let yourImages = document.querySelector("#your-box").querySelectorAll("img")
+        let dealerImages = document.querySelector("#dealer-box").querySelectorAll("img")
+        
+        // Removing all your images
+        for (image = 0; image < yourImages.length; image++) {
+            yourImages[image].remove()
+        }
+
+        // Removing all dealer's images
+        for (image = 0; image < dealerImages.length; image++) {
+            dealerImages[image].remove()
+        }
+
+        YOU["score"] = 0
+        DEALER["score"] = 0
+
+        document.querySelector("#your-blackjack-result").textContent = 0
+        document.querySelector("#your-blackjack-result").style.color = "#ffffff"
+        document.querySelector("#your-blackjack-result").style.fontWeight = "normal"
+
+        document.querySelector("#dealer-blackjack-result").textContent = DEALER["score"]
+        document.querySelector("#dealer-blackjack-result").style.color = "#ffffff"
+        document.querySelector("#dealer-blackjack-result").style.fontWeight = "normal"
+
+        document.querySelector("#blackjack-result").textContent = "Let's Play"
+        document.querySelector("#blackjack-result").style.color = "#000000"
+
+        blackjackGame["turnsOver"] = true
+    }
+
+}
+
+// Function : Update Score of Active Player
+function updateScore(card, activePlayer) {
+    
+    // If Card is "Ace"
+    if (card === 'A') {
+
+        // If adding 11 keeps the score below 21, add 11. Otherwise add 1
+        if (activePlayer["score"] + blackjackGame["cardsPoint"][card][1] <= 21) {
+            activePlayer["score"] += blackjackGame["cardsPoint"][card][1]
+        } else {
+            activePlayer["score"] += blackjackGame["cardsPoint"][card][0]
+        }
+    } else {
+        activePlayer["score"] += blackjackGame["cardsPoint"][card]
+    }
+    
+}
+
+// Function : Show Score of Active Player
+function showScore(activePlayer) {
+
+    if (activePlayer["score"] > 21) {
+        document.querySelector(activePlayer["scoreSpan"]).textContent = "BUST!"
+        document.querySelector(activePlayer["scoreSpan"]).style.color = "red"
+        document.querySelector(activePlayer["scoreSpan"]).style.fontWeight = "bold"
+    } else {
+        document.querySelector(activePlayer["scoreSpan"]).textContent = activePlayer["score"]
+    }
+    
+}
+
+// Function : Sleep / Wait Function for auto play of the dealer
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// Function : Stand Button
+// Dealer Gameplay
+async function blackjackStand() {
+
+    blackjackGame["isStand"] = true
+
+    while ( (DEALER["score"] < 16) && (blackjackGame["isStand"] === true) ) {
+        let card = generateRandomCard()
+        showCard(card, DEALER)
+        updateScore(card, DEALER)
+        showScore(DEALER)
+        await sleep(1000)
+    }
+
+    blackjackGame["turnsOver"] = true
+    let winner = findWinner()
+    showResult(winner)
+    
+}
+
+// Function : Computer Winner & return who just won
+// Update the wins, losses and draws of the game
+function findWinner() {
+    let winner
+
+    if (YOU["score"] <= 21) {
+
+        // Condition : Higher score than dealer or when dealer busts but your score is 21 or under
+        if ( (YOU["score"] > DEALER["score"]) || (DEALER["score"] > 21) ) {
+            blackjackGame["wins"]++
+            winner = YOU
+        } else if (YOU["score"] < DEALER["score"]) {
+            blackjackGame["losses"]++
+            winner = DEALER
+        } else if (YOU["score"] === DEALER["score"]) {
+            blackjackGame["draws"]++
+        } 
+
+    // Condition : When User busts but Dealer doesn't
+    } else if ( (YOU["score"] > 21) && (DEALER["score"] <= 21) ) {
+        blackjackGame["losses"]++
+        winner = DEALER
+    
+    // Condition : When User and Dealer both busts
+    } else if ( (YOU["score"] > 21) && (DEALER["score"] > 21) ) {
+        blackjackGame["draws"]++
+    }
+
+    return winner
+}
+
+// Function : Display Winner
+function showResult(winner) {
+    let message, messageColor
+
+    if (blackjackGame["turnsOver"] === true) {
+
+        if (winner === YOU) {
+            document.querySelector("#wins").textContent = blackjackGame["wins"]
+            message = "Congratulations! You Won! 🥳"
+            messageColor = "green"
+            winSound.play()
+    
+        } else if (winner === DEALER) {
+            document.querySelector("#losses").textContent = blackjackGame["losses"]
+            message = "Sorry! You Lost! 😢"
+            messageColor = "red"
+            lostSound.play()
+    
+        } else {
+            document.querySelector("#draws").textContent = blackjackGame["draws"]
+            message = "Match Tied! 😐"
+            messageColor = "brown"
+        }
+    
+        document.querySelector("#blackjack-result").textContent = message
+        document.querySelector("#blackjack-result").style.color = messageColor
+    }
+
+    
+}
