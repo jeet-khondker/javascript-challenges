@@ -70,6 +70,45 @@
             </div>
         </div>
 
+        <div class="container-5">
+            <h2>Challenge 5 : BlackJack 🃏 Game of 21</h2>
+            <h3><span id="blackjack-result">Let's Play</span></h3>
+
+            <div class="flex-blackjack-row-1">
+                <div id="your-box">
+                    <h2>You : <span id="your-blackjack-result">0</span></h2>
+                </div>
+                <div id="dealer-box">
+                    <h2>Dealer : <span id="dealer-blackjack-result">0</span></h2>
+                </div>
+            </div>
+
+            <div class="flex-blackjack-row-2">
+                <div>
+                    <button class="btn-lg btn-primary mr-2" id="hitBtn">Hit</button>
+                    <button class="btn-lg btn-warning mr-2" id="standBtn">Stand</button>
+                    <button class="btn-lg btn-danger" id="dealBtn">Deal</button>
+                </div>
+            </div>
+
+            <div class="flex-blackjack-row-3 mt-2">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Wins</th>
+                            <th>Losses</th>
+                            <th>Draws</th>
+                        </tr>
+                        <tr>
+                            <td><span id="wins">0</span></td>
+                            <td><span id="losses">0</span></td>
+                            <td><span id="draws">0</span></td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
         <script src="static/js/script.js" async defer></script>
     </body>
 </html>
